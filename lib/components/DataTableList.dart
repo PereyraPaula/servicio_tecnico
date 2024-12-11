@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:servicio_tecnico/provider/DataProvider.dart';
 
 class DataTableList extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(builder: (context, dataProvider, child) {
@@ -13,34 +12,19 @@ class DataTableList extends StatelessWidget {
         child: DataTable(
           columns: const <DataColumn>[
             DataColumn(
-              label: Text(
-                'Cantidad',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
+              label: Text('Cantidad'),
             ),
             DataColumn(
-              label: Text(
-                'Descripción',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
+              label: Text('Descripción'),
             ),
             DataColumn(
-              label: Text(
-                'PU',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
+              label: Text('PU'),
             ),
             DataColumn(
-              label: Text(
-                'Total',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
+              label: Text('Total'),
             ),
             DataColumn(
-              label: Text(
-                'Acciones',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
+              label: Text('Acciones'),
             ),
           ],
           rows: data.asMap().entries.map((entry) {
