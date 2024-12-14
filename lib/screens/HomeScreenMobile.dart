@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:servicio_tecnico/classes/Exports.dart';
 import 'package:servicio_tecnico/components/AddRowDialog.dart';
 import 'package:servicio_tecnico/components/DatePicker.dart';
@@ -28,6 +29,7 @@ class HomeScreenMobile extends StatefulWidget {
 class _HomeScreenMobileState extends State<HomeScreenMobile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  ScreenshotController screenshotController = ScreenshotController();
 
   String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
@@ -192,37 +194,56 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
             height: 15,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ElevatedButton.icon(
                 onPressed: (date.isNotEmpty && widget.data.isNotEmpty)
                     ? () {
-                        createPdf(context,
-                          PdfDataWidget(data: widget.data, date: date, total: widget.total), 
-                          ControllersInputs(nameController: _nameController, phoneController: _phoneController)
-                        );
+                        createPdf(
+                            context,
+                            StructureData(
+                                data: widget.data,
+                                date: date,
+                                total: widget.total),
+                            ControllersInputs(
+                                nameController: _nameController,
+                                phoneController: _phoneController));
                       }
                     : null,
                 icon: const Icon(Icons.picture_as_pdf),
                 label: const Text('Como PDF'),
                 style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(
-                      (date.isNotEmpty && widget.data.isNotEmpty)
-                      ? Colors.red
-                      : Colors.grey
-                    ),
+                        (date.isNotEmpty && widget.data.isNotEmpty)
+                            ? Colors.red
+                            : Colors.grey),
                     foregroundColor: WidgetStateProperty.all(Colors.white)),
               ),
-              /* ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.image),
-                          label: const Text('Como Imagen'),
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStateProperty.all(Colors.blueAccent),
-                              foregroundColor:
-                                  WidgetStateProperty.all(Colors.white)),
-                        ), */
+              const SizedBox(
+                width: 10,
+              ),
+              ElevatedButton.icon(
+                onPressed: (date.isNotEmpty && widget.data.isNotEmpty)
+                    ? () {
+                    createImage(
+                      context,
+                      ControllersInputs(
+                        nameController: _nameController,
+                        phoneController: _phoneController),
+                      screenshotController,
+                      StructureData(data: widget.data, date: date, total: widget.total)
+                    );
+                    }
+                    : null,
+                icon: const Icon(Icons.image),
+                label: const Text('Como Imagen'),
+                style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                        (date.isNotEmpty && widget.data.isNotEmpty)
+                            ? Colors.blueAccent
+                            : Colors.grey),
+                    foregroundColor: WidgetStateProperty.all(Colors.white)),
+              ),
             ],
           )
         ],

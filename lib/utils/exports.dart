@@ -1,10 +1,13 @@
+import 'dart:typed_data';
 import 'dart:io';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:screenshot/screenshot.dart';
 import 'package:servicio_tecnico/classes/Exports.dart';
 
-void createPdf(BuildContext context, PdfDataWidget widget, ControllersInputs controllers) async {
+void createPdf(BuildContext context, StructureData widget,
+    ControllersInputs controllers) async {
   final pdf = pw.Document();
 
   List<pw.TableRow> rows = [];
@@ -96,22 +99,113 @@ void createPdf(BuildContext context, PdfDataWidget widget, ControllersInputs con
     );
   }
 
+  Directory downloadDirectory = await getPathDownloads();
+
+  String nameClientFile = controllers.nameController.text != ""
+      ? controllers.nameController.text.trim().split(" ").join("_")
+      : 'Unknown';
+  final file =
+      File("${downloadDirectory.path}/${widget.date}-$nameClientFile.pdf");
+  await file.writeAsBytes(await pdf.save());
+
+  showNotification(context, file, "PDF");
+}
+
+void createImage(BuildContext context, ControllersInputs inputControllers,
+    ScreenshotController screenshotController, StructureData w) async {
+  Screenshot widget = buildWidget(screenshotController, w, inputControllers);
+
+  await screenshotController
+      .captureFromLongWidget(widget)
+      .then((Uint8List? image) async {
+    saveImage(context, screenshotController, image, inputControllers, w);
+  }).catchError((error) {
+    print(error);
+  });
+}
+
+void saveImage(BuildContext context, ScreenshotController screenshotController,
+    Uint8List? image, ControllersInputs controllers, StructureData data) async {
+  print(image);
+  if (image != null) {
+    Directory downloadDirectory = await getPathDownloads();
+    final imagePath = File(
+        '${downloadDirectory.path}/${data.date}-${controllers.nameController.text}.jpg');
+    await imagePath.writeAsBytes(image);
+    showNotification(context, imagePath, "Image");
+  }
+}
+
+void showNotification(BuildContext context, File file, String type) {
+  // ignore: use_build_context_synchronously
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("$type guardado en: ${file.path}"),
+  ));
+}
+
+Future<Directory> getPathDownloads() async {
   String path = await ExternalPath.getExternalStoragePublicDirectory(
       ExternalPath.DIRECTORY_DOWNLOADS);
   final downloadDirectory = Directory(path);
   if (!(await downloadDirectory.exists())) {
     await downloadDirectory.create(recursive: true);
   }
-
-  String nameClientFile = controllers.nameController.text != ""
-      ? controllers.nameController.text.trim().split(" ").join("_")
-      : 'Unknown';
-  final file = File("${downloadDirectory.path}/${widget.date}-$nameClientFile.pdf");
-  await file.writeAsBytes(await pdf.save());
-
-  // ignore: use_build_context_synchronously
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text("PDF guardado en: ${file.path}"),
-  ));
+  return downloadDirectory;
 }
 
+Screenshot buildWidget(ScreenshotController controller, StructureData info,
+    ControllersInputs inputControllers) {
+  return Screenshot(
+    controller: controller,
+    child: Container(
+      padding: const EdgeInsets.all(30.0),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Encabezado
+          Text("Fecha: ${info.date ?? '-'}",
+              style: const TextStyle(fontSize: 16, color: Colors.black)),
+          Text("Nombre: ${inputControllers.nameController.text ?? '-'}",
+              style: const TextStyle(fontSize: 16, color: Colors.black)),
+          Text("Celular: ${inputControllers.phoneController.text ?? '-'}",
+              style: const TextStyle(fontSize: 16, color: Colors.black)),
+          const SizedBox(height: 20),
+          // Tabla
+          DataTable(
+            columns: const [
+              DataColumn(label: Text('Cantidad')),
+              DataColumn(label: Text('Descripción')),
+              DataColumn(label: Text('PU')),
+              DataColumn(label: Text('Total')),
+            ],
+            rows: info.data
+                .map(
+                  (item) => DataRow(cells: [
+                    DataCell(Text(item['cantidad'] ?? '')),
+                    DataCell(Text(item['descripcion'].toString())),
+                    DataCell(
+                        Text(item['pu'] == null ? "" : item['pu'].toString())),
+                    DataCell(Text("\$ ${item['total'].toString()}")),
+                  ]),
+                )
+                .toList(),
+          ),
+          const SizedBox(height: 20),
+          // Total
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text("Total: \$ ${info.total!.toStringAsFixed(2)}",
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}

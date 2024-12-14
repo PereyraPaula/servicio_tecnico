@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
 
-class PdfDataWidget {
+class StructureData {
   final List<Map<String, dynamic>> data;
   final String date;
   final double? total;
 
-  PdfDataWidget({
+  StructureData({
     required this.data,
     required this.date,
     this.total,
