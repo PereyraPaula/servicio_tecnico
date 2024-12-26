@@ -89,7 +89,7 @@ void createPdf(BuildContext context, StructureData widget,
                 children: [
                   pw.Text('Total: \$',
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text(widget.total!.toStringAsFixed(2)), // Total sumado
+                  pw.Text(widget.total ?? ''), // Total sumado
                 ],
               ),
             ],
@@ -141,6 +141,15 @@ void showNotification(BuildContext context, File file, String type) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text("$type guardado en: ${file.path}"),
   ));
+}
+
+String formattedResultMoney(result) {
+  String formattedResult = result.toStringAsFixed(2).replaceAllMapped(
+    RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+    (Match m) => '${m[1]},',
+  );
+
+  return formattedResult;
 }
 
 Future<Directory> getPathDownloads() async {
@@ -197,7 +206,7 @@ Screenshot buildWidget(ScreenshotController controller, StructureData info,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text("Total: \$ ${info.total!.toStringAsFixed(2)}",
+              Text("Total: \$ ${info.total}",
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

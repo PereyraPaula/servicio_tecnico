@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
 
 class AddRowDialog extends StatefulWidget {
   final void Function(Map<String, String>) onAdd;
@@ -12,8 +13,10 @@ class AddRowDialog extends StatefulWidget {
 class _AddRowDialogState extends State<AddRowDialog> {
   final TextEditingController cantidadController = TextEditingController();
   final TextEditingController descripcionController = TextEditingController();
-  final TextEditingController puController = TextEditingController();
-  final TextEditingController totalController = TextEditingController();
+  final TextEditingController puController =
+      MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
+  final TextEditingController totalController =
+      MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
 
   bool isCantidadValid = true;
   bool isDescripcionValid = true;
@@ -33,6 +36,7 @@ class _AddRowDialogState extends State<AddRowDialog> {
           "pu": puController.text,
           "total": totalController.text,
         };
+        print(data);
         widget.onAdd(data);
         Navigator.of(context).pop();
       } else {
@@ -49,7 +53,10 @@ class _AddRowDialogState extends State<AddRowDialog> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Agregar nuevo registro', style: TextStyle(fontSize: 20),),
+            const Text(
+              'Agregar nuevo registro',
+              style: TextStyle(fontSize: 20),
+            ),
             if (errorMessage.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
@@ -66,13 +73,15 @@ class _AddRowDialogState extends State<AddRowDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // ---- Cantidad ----
                 TextField(
                   controller: cantidadController,
                   keyboardType: TextInputType.number,
                   focusNode: FocusNode(canRequestFocus: false),
                   decoration: InputDecoration(
                     labelText: 'Cantidad',
-                    errorText: isCantidadValid ? null : 'Este campo es obligatorio',
+                    errorText:
+                        isCantidadValid ? null : 'Este campo es obligatorio',
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: isCantidadValid ? Colors.grey : Colors.red),
@@ -84,6 +93,7 @@ class _AddRowDialogState extends State<AddRowDialog> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // ---- Descripción ----
                 TextField(
                   controller: descripcionController,
                   keyboardType: TextInputType.multiline,
@@ -91,7 +101,8 @@ class _AddRowDialogState extends State<AddRowDialog> {
                   focusNode: FocusNode(canRequestFocus: false),
                   decoration: InputDecoration(
                     labelText: 'Descripción',
-                    errorText: isDescripcionValid ? null : 'Este campo es obligatorio',
+                    errorText:
+                        isDescripcionValid ? null : 'Este campo es obligatorio',
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: isDescripcionValid ? Colors.grey : Colors.red),
@@ -103,6 +114,7 @@ class _AddRowDialogState extends State<AddRowDialog> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // ---- P.U ----
                 TextField(
                   controller: puController,
                   keyboardType: TextInputType.number,
@@ -118,13 +130,16 @@ class _AddRowDialogState extends State<AddRowDialog> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // ---- Total ----
                 TextField(
                   controller: totalController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   focusNode: FocusNode(canRequestFocus: false),
                   decoration: InputDecoration(
                     labelText: 'Total',
-                    errorText: isTotalValid ? null : 'Este campo es obligatorio',
+                    errorText:
+                        isTotalValid ? null : 'Este campo es obligatorio',
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: isTotalValid ? Colors.grey : Colors.red),

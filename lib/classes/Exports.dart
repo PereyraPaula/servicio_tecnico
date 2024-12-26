@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class StructureData {
   final List<Map<String, dynamic>> data;
   final String date;
-  final double? total;
+  final String? total;
 
   StructureData({
     required this.data,

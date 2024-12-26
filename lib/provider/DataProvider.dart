@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:servicio_tecnico/utils/exports.dart';
 
 class DataProvider with ChangeNotifier {
   List<Map<String, dynamic>> _data = [];
 
   List<Map<String, dynamic>> get data => _data;
 
-  double get total {
-    return _data.fold(0, (sum, item) => sum + int.parse(item['total']));
+  String get total {
+    double total = _data.fold(0, (sum, item) {
+      String sumString = sum.toString().replaceAll(",", "");
+      String itemTotalString = item['total'].replaceAll(",", "");
+      double sumValue = double.parse(sumString);
+      double itemValue = double.parse(itemTotalString);
+      return sumValue + itemValue;
+    });
+
+    return formattedResultMoney(total);
   }
-  
+
   int get quantity {
     return _data.length;
   }

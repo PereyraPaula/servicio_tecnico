@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Consumer<DataProvider>(builder: (context, dataProvider, child) {
           final data = dataProvider.data;
-          double total = context.read<DataProvider>().total;
+          String total = context.read<DataProvider>().total;
           int quantity = context.read<DataProvider>().quantity;
           return SingleChildScrollView(
             child: Padding(

@@ -14,11 +14,11 @@ class HomeScreenMobile extends StatefulWidget {
       {super.key,
       required this.data,
       this.quantity = 0,
-      this.total = 0.00,
+      this.total = "0.00",
       required this.addItem});
 
   final List<Map<String, dynamic>> data;
-  final double? total;
+  final String? total;
   final int? quantity;
   final void Function(Map<String, dynamic>) addItem;
 
@@ -33,7 +33,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
 
   String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
-  double total = 0;
+  String total = "0.00";
 
   @override
   void initState() {
@@ -159,7 +159,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
           Row(
             children: [
               Text(
-                'Total: \$${widget.total?.toStringAsFixed(2)}',
+                'Total: \$${widget.total}',
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
