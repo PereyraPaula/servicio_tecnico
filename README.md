@@ -2,6 +2,8 @@
 
 # Servicio técnico
 
+<img src="assets/images/screenshot.png" heigth="500" style="margin-bottom: 1rem" />
+
 Aplicación hecha en Flutter para diseñar y exportar presupuestos en PDF. Incorpora datos del cliente y detalla cada ítem del presupuesto.
 
 ## Configuración
