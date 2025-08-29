@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:servicio_tecnico/classes/Budget.dart';
 import 'package:servicio_tecnico/components/Card.dart';
 import 'package:servicio_tecnico/providers/budget_provider.dart';
 import 'package:servicio_tecnico/screen/BudgetFormScreen.dart';
@@ -19,7 +20,7 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final budgets = ref.watch(budgetsProvider);
+    late List<Budget> budgets = ref.watch(budgetsProvider);
     print(budgets);
 
     return Container(
@@ -47,7 +48,7 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const BudgetFormScreen()),
-                      );
+                      ).then((value) => {budgets = ref.watch(budgetsProvider)});
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +72,9 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                       budget: budget,
                       onShare: () {},
                       onDelete: () {
-                        // ref.read(budgetsProvider.notifier).remove(budget);
+                        ref
+                            .read(budgetsProvider.notifier)
+                            .removeBudget(budget.id);
                       },
                     );
                   }).toList(),

@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:servicio_tecnico/components/Navbar.dart';
+import 'package:servicio_tecnico/providers/budget_provider.dart';
 import 'package:servicio_tecnico/screen/HomeScreen.dart';
 import 'package:servicio_tecnico/screen/SettingsScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+
   runApp(
-    // Envuelve toda la app con ProviderScope
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
+      child: const MyApp(),
     ),
   );
 }

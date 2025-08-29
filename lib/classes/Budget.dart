@@ -22,6 +22,29 @@ class Budget {
     return items.fold(0.0, (sum, item) => sum + item.total);
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'clientName': clientName,
+      'contactNumber': contactNumber,
+      'creationDate': creationDate,
+      'items': items.map((item) => item.toJson()).toList(),
+    };
+  }
+
+  factory Budget.fromJson(Map<String, dynamic> json) {
+    return Budget(
+      id: json['id']?.toString(),
+      clientName: json['clientName']?.toString() ?? '',
+      contactNumber: json['contactNumber']?.toString() ?? '',
+      creationDate: json['creationDate']?.toString(),
+      items: List<BudgetItem>.from(
+        (json['items'] as List<dynamic>?)?.map((x) => BudgetItem.fromJson(x)) ??
+            [],
+      ),
+    );
+  }
+
   Budget addItem(BudgetItem item) {
     return copyWith(items: [...items, item]);
   }

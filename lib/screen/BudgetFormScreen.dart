@@ -38,15 +38,14 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
 
   void getData() {
     if (_formKey.currentState!.validate()) {
-      // Crear el budget final con todos los datos
+      // Budget final con todos los datos
       final completedBudget = _currentBudget.copyWith(
         clientName: _clientNameController.text,
         contactNumber: _contactNumberController.text,
       );
 
-      print("Presupuesto creado: ${completedBudget.toString()}");
+      // print("Presupuesto creado: ${completedBudget.toString()}");
 
-      // Aquí puedes guardar el budget en tu provider o base de datos
       ref.read(budgetsProvider.notifier).addBudget(completedBudget);
 
       ScaffoldMessenger.of(context).showSnackBar(
