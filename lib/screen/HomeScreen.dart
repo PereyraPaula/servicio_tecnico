@@ -63,7 +63,7 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 const Text(
-                  "Ultimos presupuestos",
+                  "Ultimos 5 presupuestos",
                   style: TextStyle(fontSize: 18.0),
                 ),
                 Column(
