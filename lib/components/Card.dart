@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:servicio_tecnico/classes/Budget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CardItem extends StatelessWidget {
   final Budget budget;
@@ -12,6 +13,16 @@ class CardItem extends StatelessWidget {
     required this.onShare,
     required this.onDelete,
   });
+
+  Future<void> openWhatsApp(String phone) async {
+    final Uri whatsappUrl = Uri.parse("https://wa.me/$phone");
+
+    if (await canLaunchUrl(whatsappUrl)) {
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+    } else {
+      throw "No se pudo abrir WhatsApp";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +99,17 @@ class CardItem extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              GestureDetector(
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Image(
+                    image: AssetImage('assets/images/whatsapp.png'),
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
+                onTap: () => openWhatsApp(budget.contactNumber),
+              ),
               IconButton(
                 onPressed: onShare,
                 icon: const Icon(Icons.share),

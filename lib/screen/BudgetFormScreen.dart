@@ -1,3 +1,4 @@
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:servicio_tecnico/classes/Budget.dart';
@@ -14,12 +15,13 @@ class BudgetFormScreen extends ConsumerStatefulWidget {
 class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _clientNameController = TextEditingController();
-  final _contactNumberController = TextEditingController();
+  final _contactNumberController = MaskedTextController(
+      mask: "000-0000000000"); // Formato con 549... de argentina
 
   // Controllers para los campos del item
   final _nameItemController = TextEditingController();
   final _unitPriceController = TextEditingController();
-  final _quantityController = TextEditingController(text: '1');
+  final _quantityController = TextEditingController(text: "1");
 
   Budget _currentBudget = Budget(
     clientName: '',
@@ -41,7 +43,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
       // Budget final con todos los datos
       final completedBudget = _currentBudget.copyWith(
         clientName: _clientNameController.text,
-        contactNumber: _contactNumberController.text,
+        contactNumber: _contactNumberController.text.replaceAll("-", ""),
       );
 
       // print("Presupuesto creado: ${completedBudget.toString()}");
@@ -120,7 +122,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
 
     _nameItemController.clear();
     _unitPriceController.clear();
-    _quantityController.text = "1.0";
+    _quantityController.text = "1";
   }
 
   void _removeItem(String itemId) {
@@ -169,6 +171,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
         ),
         const SizedBox(height: 16),
         TextFormField(
+          controller: _contactNumberController,
           decoration: InputDecoration(
               hintText: 'Teléfono del cliente',
               hintStyle: const TextStyle(
@@ -190,6 +193,11 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                     const BorderSide(color: Color(0xFF2A3D53), width: 1.5),
               )),
           keyboardType: TextInputType.phone,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          "Formato: 549-XXXXXXXXXX. \nNo hay que escribir simbolos, solo números.",
+          style: TextStyle(color: Colors.grey[600]),
         ),
       ],
     );
@@ -274,6 +282,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
             ),
           ],
         ),
+        const SizedBox(height: 8),
         const SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
@@ -332,7 +341,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                     return ListTile(
                       title: Text(item.description),
                       subtitle: Text(
-                          'Precio: \$${item.unitPrice} - Cantidad: ${item.quantity}'),
+                          'Precio: \$${item.unitPrice} \nCantidad: ${item.quantity}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

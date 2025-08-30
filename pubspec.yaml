@@ -19,6 +19,7 @@ dependencies:
   screenshot: ^3.0.0
   extended_masked_text: ^3.0.1
   flutter_riverpod: ^2.6.1
+  url_launcher: ^6.3.0
 
 
 dev_dependencies:

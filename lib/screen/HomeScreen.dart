@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:servicio_tecnico/classes/Budget.dart';
 import 'package:servicio_tecnico/components/Card.dart';
+import 'package:servicio_tecnico/components/ModalShare.dart';
 import 'package:servicio_tecnico/providers/budget_provider.dart';
 import 'package:servicio_tecnico/screen/BudgetFormScreen.dart';
 
@@ -16,6 +17,11 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void onShare() {
+    showModalBottomSheet(
+        context: context, builder: (ctx) => const ModalShare());
   }
 
   @override
@@ -67,17 +73,29 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(fontSize: 18.0),
                 ),
                 Column(
-                  children: budgets.map((budget) {
-                    return CardItem(
-                      budget: budget,
-                      onShare: () {},
-                      onDelete: () {
-                        ref
-                            .read(budgetsProvider.notifier)
-                            .removeBudget(budget.id);
-                      },
-                    );
-                  }).toList(),
+                  children: budgets.isEmpty
+                      ? [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: Center(
+                              child: Text(
+                                "No hay presupuestos",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                            ),
+                          )
+                        ]
+                      : budgets.map((budget) {
+                          return CardItem(
+                            budget: budget,
+                            onShare: onShare,
+                            onDelete: () {
+                              ref
+                                  .read(budgetsProvider.notifier)
+                                  .removeBudget(budget.id);
+                            },
+                          );
+                        }).toList(),
                 )
               ],
             ),
