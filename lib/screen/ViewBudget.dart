@@ -196,7 +196,12 @@ class ViewBudget extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: null,
+                        onPressed: () => {
+                          if (data != null ||
+                              data!['items'] != null ||
+                              data!['items'].isNotEmpty)
+                            generatePDF(data!, context)
+                        },
                         icon: const Icon(Icons.picture_as_pdf_outlined),
                         label: const Text('Enviar como PDF'),
                         style: _buttonStyle(),
