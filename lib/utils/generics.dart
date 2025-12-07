@@ -4,6 +4,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -253,5 +256,41 @@ Future<void> generatePDF(
         duration: const Duration(seconds: 4),
       ),
     );
+  }
+}
+
+Future<void> captureAndShareScreenshot(
+  ScreenshotController controller,
+  BuildContext context,
+  String fileName,
+) async {
+  Uint8List? image = await controller.capture(
+    delay: const Duration(milliseconds: 10),
+    pixelRatio: MediaQuery.of(context).devicePixelRatio,
+  );
+
+  if (image == null) {
+    print('Error: La imagen capturada es nula.');
+    return;
+  }
+
+  final directory = await getTemporaryDirectory();
+  final imagePath =
+      '${directory.path}/$fileName-${DateTime.now().millisecondsSinceEpoch}.png';
+  final imageFile = File(imagePath);
+
+  await imageFile.writeAsBytes(image);
+
+  final xFile = XFile(imagePath);
+
+  final params = ShareParams(
+    text: 'Presupuesto por reparación de celular',
+    files: [xFile],
+  );
+
+  final result = await SharePlus.instance.share(params);
+
+  if (result.status == ShareResultStatus.success) {
+    print('Imagen obtenida');
   }
 }

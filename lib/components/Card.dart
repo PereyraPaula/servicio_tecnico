@@ -101,8 +101,10 @@ class CardItem extends StatelessWidget {
                   onTap: () => openWhatsApp(budget.contactNumber),
                 ),
                 IconButton(
-                  onPressed: onShare,
-                  icon: const Icon(Icons.share),
+                  onPressed: () {
+                    generatePDF(budget.toJson(), context);
+                  },
+                  icon: const Icon(Icons.picture_as_pdf),
                   color: Colors.grey[700],
                 ),
                 IconButton(

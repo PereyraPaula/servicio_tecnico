@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:servicio_tecnico/utils/generics.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class ViewBudget extends StatelessWidget {
   final Map<String, dynamic>? data;
+  final ScreenshotController screenshotController;
 
   const ViewBudget({
     Key? key,
     required this.data,
+    required this.screenshotController,
   }) : super(key: key);
 
   String _getSafeString(String key, {String defaultValue = ''}) {
@@ -80,103 +83,105 @@ class ViewBudget extends StatelessWidget {
       body: Center(
         child: Container(
           width: 350, // Ancho fijo para simular el diálogo/pantalla
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
+          decoration: decoration,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 20, left: 20, right: 10, bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    const Text(
-                      'Presupuesto',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+              Screenshot(
+                controller: screenshotController,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20, left: 20, right: 10, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            const Text(
+                              'Presupuesto',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Cliente: $client",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        height: 1.5,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "Cliente: $client",
+                              style: const TextStyle(
+                                fontSize: 20,
+                                height: 1.5,
+                              ),
+                            ),
+                            Text(
+                              "Total: $total\$",
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF2A3D53),
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            // Encabezado DETALLES
+                            const Text(
+                              'DETALLES',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+
+                            _buildDetailRow('Contacto', contact),
+                            _buildDetailRow('Fecha', creationDate),
+                            const Divider(height: 20),
+
+                            const Text(
+                              'ITEMS',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+
+                            if (data == null ||
+                                data!['items'] == null ||
+                                data!['items'].isEmpty)
+                              const Text("-")
+                            else
+                              ...data!['items'].map<Widget>((item) {
+                                return _buildDetailRow(
+                                  "${item["description"] ?? "N/A"} (${item["quantity"]})",
+                                  "${item["unitPrice"] ?? "N/A"} \$",
+                                );
+                              }).toList(),
+                            const SizedBox(height: 30),
+                          ],
+                        ),
                       ),
-                    ),
-                    Text(
-                      "Total: $total\$",
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Encabezado DETALLES
-                    const Text(
-                      'DETALLES',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    _buildDetailRow('Contacto', contact),
-                    _buildDetailRow('Fecha', creationDate),
-                    const Divider(height: 20),
-
-                    const Text(
-                      'ITEMS',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-
-                    if (data == null ||
-                        data!['items'] == null ||
-                        data!['items'].isEmpty)
-                      const Text("-")
-                    else
-                      ...data!['items'].map<Widget>((item) {
-                        return _buildDetailRow(
-                          "${item["description"] ?? "N/A"} (${item["quantity"]})",
-                          "${item["unitPrice"] ?? "N/A"} \$",
-                        );
-                      }).toList(),
-                    const SizedBox(height: 30),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Padding(
@@ -186,7 +191,11 @@ class ViewBudget extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: null,
+                        onPressed: () => captureAndShareScreenshot(
+                          screenshotController,
+                          context,
+                          client,
+                        ),
                         icon: const Icon(Icons.image),
                         label: const Text('Enviar como imagen'),
                         style: _buttonStyle(),
@@ -230,3 +239,15 @@ class ViewBudget extends StatelessWidget {
     );
   }
 }
+
+BoxDecoration decoration = BoxDecoration(
+  color: Colors.white,
+  borderRadius: BorderRadius.circular(15),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.1),
+      blurRadius: 10,
+      offset: const Offset(0, 5),
+    ),
+  ],
+);

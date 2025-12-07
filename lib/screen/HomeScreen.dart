@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:servicio_tecnico/classes/Budget.dart';
 import 'package:servicio_tecnico/components/Card.dart';
 import 'package:servicio_tecnico/components/ModalShare.dart';
@@ -15,14 +16,19 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
+  final ScreenshotController screenshotController = ScreenshotController();
+
   @override
   void initState() {
     super.initState();
   }
 
-  void onShare() {
+  void onShare(Map<String, dynamic> data) {
     showModalBottomSheet(
-        context: context, builder: (ctx) => const ModalShare());
+        context: context,
+        builder: (ctx) => ModalShare(
+              data: data,
+            ));
   }
 
   @override
@@ -88,7 +94,7 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                       : budgets.map((budget) {
                           return CardItem(
                             budget: budget,
-                            onShare: onShare,
+                            onShare: () => onShare(budget.toJson()),
                             onDelete: () {
                               ref
                                   .read(budgetsProvider.notifier)
@@ -99,6 +105,8 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ViewBudget(
+                                          screenshotController:
+                                              screenshotController,
                                           data: budget.toJson(),
                                         )),
                               );
