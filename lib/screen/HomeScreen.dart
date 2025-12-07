@@ -5,6 +5,7 @@ import 'package:servicio_tecnico/components/Card.dart';
 import 'package:servicio_tecnico/components/ModalShare.dart';
 import 'package:servicio_tecnico/providers/budget_provider.dart';
 import 'package:servicio_tecnico/screen/BudgetFormScreen.dart';
+import 'package:servicio_tecnico/screen/ViewBudget.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -93,6 +94,13 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                               ref
                                   .read(budgetsProvider.notifier)
                                   .removeBudget(budget.id);
+                            },
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const ViewBudget()),
+                              );
                             },
                           );
                         }).toList(),
