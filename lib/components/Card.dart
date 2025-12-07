@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:servicio_tecnico/classes/Budget.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:servicio_tecnico/utils/generics.dart';
 
 class CardItem extends StatelessWidget {
   final Budget budget;
@@ -16,16 +17,6 @@ class CardItem extends StatelessWidget {
     required this.onTap,
   });
 
-  Future<void> openWhatsApp(String phone) async {
-    final Uri whatsappUrl = Uri.parse("https://wa.me/$phone");
-
-    if (await canLaunchUrl(whatsappUrl)) {
-      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-    } else {
-      throw "No se pudo abrir WhatsApp";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,12 +25,12 @@ class CardItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: const Color.fromARGB(255, 212, 212, 212)!,
+            color: Color.fromARGB(255, 212, 212, 212),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: const Offset(0, 1),
+            offset: Offset(0, 1),
           ),
         ],
       ),
@@ -82,7 +73,7 @@ class CardItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    _formatDate(DateTime.parse(budget.creationDate)),
+                    formatDate(DateTime.parse(budget.creationDate)),
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black54,
@@ -105,13 +96,8 @@ class CardItem extends StatelessWidget {
               children: [
                 GestureDetector(
                   child: const Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Image(
-                      image: AssetImage('assets/images/whatsapp.png'),
-                      width: 30,
-                      height: 30,
-                    ),
-                  ),
+                      padding: EdgeInsets.only(right: 10),
+                      child: Icon(FontAwesome.whatsapp, color: Colors.green)),
                   onTap: () => openWhatsApp(budget.contactNumber),
                 ),
                 IconButton(
@@ -130,9 +116,5 @@ class CardItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
   }
 }

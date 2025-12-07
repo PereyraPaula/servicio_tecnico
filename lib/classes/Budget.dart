@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'BudgetItem.dart';
 
 class Budget {
@@ -17,17 +18,23 @@ class Budget {
         creationDate = creationDate ?? DateTime.now().toIso8601String(),
         items = items ?? [];
 
-  // Getter para calcular el total del presupuesto
   double get total {
     return items.fold(0.0, (sum, item) => sum + item.total);
   }
 
   Map<String, dynamic> toJson() {
+    final formatter = NumberFormat.currency(locale: 'es_ES', symbol: '€');
+
     return {
       'id': id,
       'clientName': clientName,
       'contactNumber': contactNumber,
       'creationDate': creationDate,
+      'price': formatter.format(total),
+      'contact': contactNumber,
+      'date': DateFormat('dd/MM/yyyy').format(DateTime.parse(creationDate)),
+      'number': 'N°: $id',
+      'total': total,
       'items': items.map((item) => item.toJson()).toList(),
     };
   }
@@ -45,6 +52,17 @@ class Budget {
     );
   }
 
+  Map<String, dynamic> toViewBudgetMap() {
+    final formatter = NumberFormat.currency(locale: 'es_ES', symbol: '€');
+
+    return {
+      'price': formatter.format(total),
+      'contact': contactNumber,
+      'date': DateFormat('dd/MM/yyyy').format(DateTime.parse(creationDate)),
+      'number': 'N°: $id',
+    };
+  }
+
   Budget addItem(BudgetItem item) {
     return copyWith(items: [...items, item]);
   }
@@ -60,28 +78,6 @@ class Budget {
       items: items
           .map((item) => item.id == updatedItem.id ? updatedItem : item)
           .toList(),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'clientName': clientName,
-      'contactNumber': contactNumber,
-      'creationDate': creationDate,
-      'items': items.map((item) => item.toMap()).toList(),
-    };
-  }
-
-  factory Budget.fromMap(Map<String, dynamic> map) {
-    return Budget(
-      id: map['id'],
-      clientName: map['clientName'],
-      contactNumber: map['contactNumber'],
-      creationDate: map['creationDate'],
-      items: List<BudgetItem>.from(
-        map['items']?.map((x) => BudgetItem.fromMap(x)) ?? [],
-      ),
     );
   }
 

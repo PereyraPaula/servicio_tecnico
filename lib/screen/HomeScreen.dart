@@ -28,7 +28,6 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     late List<Budget> budgets = ref.watch(budgetsProvider);
-    print(budgets);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -99,7 +98,9 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const ViewBudget()),
+                                    builder: (context) => ViewBudget(
+                                          data: budget.toJson(),
+                                        )),
                               );
                             },
                           );
