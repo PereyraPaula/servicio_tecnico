@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:servicio_tecnico/classes/Budget.dart';
 import 'package:servicio_tecnico/components/Card.dart';
-import 'package:servicio_tecnico/components/ModalShare.dart';
 import 'package:servicio_tecnico/providers/budget_provider.dart';
 import 'package:servicio_tecnico/screen/BudgetFormScreen.dart';
 import 'package:servicio_tecnico/screen/ViewBudget.dart';
@@ -21,14 +20,6 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-  }
-
-  void onShare(Map<String, dynamic> data) {
-    showModalBottomSheet(
-        context: context,
-        builder: (ctx) => ModalShare(
-              data: data,
-            ));
   }
 
   @override
@@ -94,7 +85,6 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                       : budgets.map((budget) {
                           return CardItem(
                             budget: budget,
-                            onShare: () => onShare(budget.toJson()),
                             onDelete: () {
                               ref
                                   .read(budgetsProvider.notifier)

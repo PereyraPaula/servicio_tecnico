@@ -5,14 +5,14 @@ import 'package:servicio_tecnico/utils/generics.dart';
 
 class CardItem extends StatelessWidget {
   final Budget budget;
-  final VoidCallback onShare;
+  final VoidCallback? onShare;
   final VoidCallback onDelete;
   final VoidCallback onTap;
 
   const CardItem({
     super.key,
     required this.budget,
-    required this.onShare,
+    this.onShare,
     required this.onDelete,
     required this.onTap,
   });
