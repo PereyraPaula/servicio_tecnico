@@ -21,7 +21,7 @@ class CardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.fromLTRB(4, 10, 4, 5),
+      margin: const EdgeInsets.fromLTRB(0, 10, 0, 5),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.0),

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -107,6 +108,21 @@ Future<void> generatePDF(
         ];
       }).toList(),
     );
+  }
+
+  final prefs = await SharedPreferences.getInstance();
+  const String imagePathKey = 'footer_image_path';
+  final savedPath = prefs.getString(imagePathKey);
+  pw.MemoryImage? image;
+
+  if (savedPath != null && savedPath.isNotEmpty) {
+    try {
+      final imageBytes = await File(savedPath).readAsBytes();
+      image = pw.MemoryImage(imageBytes);
+    } catch (e) {
+      print('Error cargando imagen: $e');
+      image = null;
+    }
   }
 
   pw.Widget _buildTotalRow(String label, double amount, String currency,
@@ -230,7 +246,13 @@ Future<void> generatePDF(
                             isBold: true,
                             fontSize: 18,
                             color: PdfColors.blue900),
-                      ]))
+                      ])),
+              pw.Spacer(),
+              if (image != null)
+                pw.Container(
+                  alignment: pw.Alignment.center,
+                  child: pw.Image(image, width: 100, height: 50),
+                ),
             ],
           ),
         );
