@@ -16,7 +16,9 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _clientNameController = TextEditingController();
   final _contactNumberController = MaskedTextController(
-      mask: "000-0000000000"); // Formato con 549... de argentina
+    mask: "000-0000000000", // ajusta a tu formato
+    text: '549', // Formato con 549... de argentina
+  );
 
   // Controllers para los campos del item
   final _nameItemController = TextEditingController();

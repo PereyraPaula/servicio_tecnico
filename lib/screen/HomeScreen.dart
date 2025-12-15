@@ -26,87 +26,94 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     late List<Budget> budgets = ref.watch(budgetsProvider);
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10.0),
-      color: const Color(0xFFF1F3F4),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2A3D53),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        padding: const EdgeInsets.all(10.0)),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const BudgetFormScreen()),
-                      ).then((value) => {budgets = ref.watch(budgetsProvider)});
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add),
-                        Text(
-                          "Agregar nuevo",
-                          style: TextStyle(fontSize: 18.0),
-                        )
-                      ],
+    return Scaffold(
+      appBar: AppBar(
+          title: const Text('Servicio técnico'),
+          backgroundColor: const Color(0xFF2A3D53),
+          foregroundColor: Colors.white),
+      backgroundColor: Colors.transparent,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2A3D53),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
-                  ),
+                    padding: const EdgeInsets.all(15)),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const BudgetFormScreen()),
+                  ).then((value) => {budgets = ref.watch(budgetsProvider)});
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add),
+                    Text(
+                      "Agregar nuevo",
+                      style: TextStyle(fontSize: 18.0),
+                    )
+                  ],
                 ),
-                const Text(
-                  "Ultimos 5 presupuestos",
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                Column(
-                  children: budgets.isEmpty
-                      ? [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: Center(
-                              child: Text(
-                                "No hay presupuestos",
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                            ),
-                          )
-                        ]
-                      : budgets.map((budget) {
-                          return CardItem(
-                            budget: budget,
-                            onDelete: () {
-                              ref
-                                  .read(budgetsProvider.notifier)
-                                  .removeBudget(budget.id);
-                            },
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ViewBudget(
-                                          screenshotController:
-                                              screenshotController,
-                                          data: budget.toJson(),
-                                        )),
-                              );
-                            },
-                          );
-                        }).toList(),
-                )
-              ],
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Ultimos 5 presupuestos",
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                  Column(
+                    children: budgets.isEmpty
+                        ? [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16),
+                              child: Center(
+                                child: Text(
+                                  "No hay presupuestos",
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                              ),
+                            )
+                          ]
+                        : budgets.map((budget) {
+                            return CardItem(
+                              budget: budget,
+                              onDelete: () {
+                                ref
+                                    .read(budgetsProvider.notifier)
+                                    .removeBudget(budget.id);
+                              },
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ViewBudget(
+                                            screenshotController:
+                                                screenshotController,
+                                            data: budget.toJson(),
+                                          )),
+                                );
+                              },
+                            );
+                          }).toList(),
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
