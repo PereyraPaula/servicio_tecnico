@@ -6,12 +6,10 @@ Aplicación hecha en Flutter generar presupuestos sencillos. Incorpora detalles 
 
 # Screenshots
 
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 3rem;">
-  <img src="./images/01.png" alt="Visualiza y gestiona todos tus presupuestos">
-  <img src="./images/02.png" alt="Presupuesto profesional listo para enviar">
-  <img src="./images/03.png" alt="Crea presupuestos detallados">
-  <img src="./images/04.png" alt="Personaliza tu marca y logotipo en los documentos">
-</div>
+| | |
+| :---: | :---: |
+| ![Visualiza y gestiona todos tus presupuestos](./images/01.png) | ![Presupuesto profesional listo para enviar](./images/02.png) |
+| ![Crea presupuestos detallados](./images/03.png) | ![Personaliza tu marca y logotipo en los documentos](./images/04.png) |
 
 # Características
 - Guarda los ultimos 5 presupuestos.
