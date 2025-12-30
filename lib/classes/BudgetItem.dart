@@ -36,6 +36,7 @@ class BudgetItem {
 
   // Copiar con cambios
   BudgetItem copyWith({
+    String? id,
     int? quantity,
     String? description,
     double? unitPrice,

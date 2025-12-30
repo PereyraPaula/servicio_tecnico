@@ -36,20 +36,27 @@ class ViewBudget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+              softWrap: true,
+              overflow: TextOverflow.visible,
             ),
           ),
+          const SizedBox(width: 8),
           Text(
             displayValue,
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
+            textAlign: TextAlign.right,
           ),
         ],
       ),

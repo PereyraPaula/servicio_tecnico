@@ -53,7 +53,6 @@ Future<void> generatePDF(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Container(
-            width: 80,
             child: pw.Text(
               label,
               style: pw.TextStyle(
@@ -225,7 +224,7 @@ Future<void> generatePDF(
                               color: PdfColors.black, width: 1.0)))),
               pw.SizedBox(height: 15),
               pw.Text(
-                'Items:',
+                'Ítems:',
                 style: pw.TextStyle(
                   fontSize: 18,
                   font: font,

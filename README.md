@@ -2,11 +2,16 @@
 
 # Servicio técnico
 
-<!-- <img src="assets/images/screenshot.png" heigth="500" style="margin-bottom: 1rem" /> -->
-
 Aplicación hecha en Flutter generar presupuestos sencillos. Incorpora detalles del cliente y lista cada ítem del presupuesto.
 
 # Screenshots
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 3rem;">
+  <img src="./images/01.png" alt="Visualiza y gestiona todos tus presupuestos">
+  <img src="./images/02.png" alt="Presupuesto profesional listo para enviar">
+  <img src="./images/03.png" alt="Crea presupuestos detallados">
+  <img src="./images/04.png" alt="Personaliza tu marca y logotipo en los documentos">
+</div>
 
 # Características
 - Guarda los ultimos 5 presupuestos.
@@ -26,7 +31,7 @@ Aplicación hecha en Flutter generar presupuestos sencillos. Incorpora detalles 
 # Instalacion
 1. **Clonar el repositorio:**
   ```bash
-    git clone example@example.com/path/to/my-project.git 
+    git clone example@example.com/path/to/my-project.git
   ```
 
 2. **Instalar dependencias:**
@@ -34,7 +39,7 @@ Aplicación hecha en Flutter generar presupuestos sencillos. Incorpora detalles 
     flutter pub get
   ```
 
-3. **Ejecución**  
+3. **Ejecución**
 Para ejecutar la aplicación en un emulador o dispositivo físico:
   ```bash
     flutter run

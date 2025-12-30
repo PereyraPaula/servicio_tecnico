@@ -6,6 +6,7 @@ import 'package:servicio_tecnico/components/Card.dart';
 import 'package:servicio_tecnico/providers/budget_provider.dart';
 import 'package:servicio_tecnico/screen/BudgetFormScreen.dart';
 import 'package:servicio_tecnico/screen/ViewBudget.dart';
+import 'package:servicio_tecnico/utils/budgetMockupData.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -16,16 +17,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
   final ScreenshotController screenshotController = ScreenshotController();
+  bool demoMode = false;
+  List<Budget> budgets = [];
 
   @override
   void initState() {
     super.initState();
+    _loadBudgets();
+  }
+
+  void _loadBudgets() {
+    setState(() {
+      budgets = demoMode ? mockBudgets : ref.read(budgetsProvider);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    late List<Budget> budgets = ref.watch(budgetsProvider);
-
     return Scaffold(
       appBar: AppBar(
           title: const Text('Servicio técnico'),
@@ -78,8 +86,7 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
                     children: budgets.isEmpty
                         ? [
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               child: Center(
                                 child: Text(
                                   "No hay presupuestos",
