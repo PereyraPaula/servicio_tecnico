@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:screenshot/screenshot.dart';
@@ -23,7 +24,9 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadBudgets();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadBudgets();
+    });
   }
 
   void _loadBudgets() {
@@ -34,6 +37,12 @@ class _BudgetFormScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(budgetsProvider, (previous, next) {
+      if (!demoMode && !listEquals(previous, next)) {
+        _loadBudgets();
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
           title: const Text('Servicio técnico'),

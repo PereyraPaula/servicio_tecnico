@@ -165,6 +165,7 @@ Future<void> generatePDF(
   pdf.addPage(
     pw.Page(
       pageFormat: PdfPageFormat.a4,
+      margin: const pw.EdgeInsets.all(15),
       build: (pw.Context context) {
         return pw.Container(
           padding: const pw.EdgeInsets.all(30),
@@ -249,8 +250,15 @@ Future<void> generatePDF(
               pw.Spacer(),
               if (image != null)
                 pw.Container(
-                  alignment: pw.Alignment.center,
-                  child: pw.Image(image, width: 100, height: 50),
+                  alignment: pw.Alignment.bottomCenter,
+                  width: double.infinity,
+                  constraints: const pw.BoxConstraints(
+                    maxHeight: 300,
+                  ),
+                  child: pw.Image(
+                    image,
+                    fit: pw.BoxFit.contain,
+                  ),
                 ),
             ],
           ),
